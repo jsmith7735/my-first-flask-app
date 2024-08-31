@@ -1,7 +1,12 @@
 from flask import Flask, render_template, request, url_for, flash, redirect
+import os
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '5b206ec2482876eb4a6e56a0f9e1e5a81f2378e798b33239'
+print(os.environ.get('SECRET_KEY'))
+print("after")
+# Don't Do this in production. 
+# In Project IDX Need to update to use Google Secrets Manager
+app.config['SECRET_KEY'] = 'SuperSecretKey'
 
 messages = [{'title': 'Message One',
              'content': 'Message One Content'},
