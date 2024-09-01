@@ -1,35 +1,20 @@
-from flask import Flask, render_template, request, url_for, flash, redirect
-import os
+from flask import Flask, render_template, redirect, url_for
+from forms import CourseForm
 
 app = Flask(__name__)
-print(os.environ.get('SECRET_KEY'))
-print("after")
-# Don't Do this in production. 
-# In Project IDX Need to update to use Google Secrets Manager
 app.config['SECRET_KEY'] = 'SuperSecretKey'
 
-messages = [{'title': 'Message One',
-             'content': 'Message One Content'},
-            {'title': 'Message Two',
-             'content': 'Message Two Content'}
-            ]
 
-@app.route('/')
+courses_list = [{
+    'title': 'Python 101',
+    'description': 'Learn Python basics',
+    'price': 34,
+    'available': True,
+    'level': 'Beginner'
+    }]
+
+
+@app.route('/', methods=('GET', 'POST'))
 def index():
-    return render_template('index.html', messages=messages)
-
-# ...
-
-@app.route('/create/', methods=('GET', 'POST'))
-def create():
-    if request.method == 'POST':
-        title = request.form['title']
-        content = request.form['content']
-        if not title:
-            flash('Title is required!')
-        elif not content:
-            flash('Content is required!')
-        else:
-            messages.append({'title': title, 'content': content})
-            return redirect(url_for('index'))
-    return render_template('create.html')
+    form = CourseForm()
+    return render_template('index.html', form=form)
